@@ -11,21 +11,21 @@
             background-color: #36393f;
             margin: 0;
             padding: 0;
+            color: #fff;
         }
 
         .profile-header {
             background-color: #7289da;
-            color: #fff;
-            text-align: center;
             padding: 20px;
+            text-align: center;
         }
 
-        .profile-picture img {
+        .profile-avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 3px solid #fff;
-            margin: 10px auto;
+            border: 4px solid #7289da;
+            margin: 0 auto 10px;
             display: block;
         }
 
@@ -34,60 +34,53 @@
             margin-bottom: 5px;
         }
 
-        .profile-tabs {
-            display: flex;
-            justify-content: space-around;
-            border-bottom: 1px solid #ccc;
-            padding: 10px;
-        }
-
-        .profile-tab {
-            cursor: pointer;
-            font-size: 16px;
-            padding: 10px 0;
+        .profile-details {
+            font-size: 18px;
+            margin-bottom: 20px;
         }
 
         .profile-content {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
-            background-color: #fff;
-            border-radius: 5px;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #202225;
+            border-radius: 5px;
         }
 
-        .connection-list {
+        .connections-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
             justify-content: center;
         }
 
         .connection-item {
-            flex-basis: calc(25% - 20px);
-            margin-bottom: 20px;
             text-align: center;
+            margin: 10px;
+            flex-basis: calc(33.333% - 20px);
         }
 
         .connection-logo img {
-            max-width: 80px;
-            max-height: 80px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
+        }
+
+        .connection-name {
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <header class="profile-header">
-        <div class="profile-picture">
-            <img src="" alt="Profile Picture">
-        </div>
+        <img class="profile-avatar" src="" alt="Profile Picture">
         <div class="profile-username" id="username"></div>
-        <div class="profile-tabs">
-            <div class="profile-tab" id="overview-tab">Overview</div>
-        </div>
+        <div class="profile-details" id="details"></div>
     </header>
     <div class="profile-content" id="profile-content">
-        <!-- Content will be dynamically populated here -->
+        <h2>Connections & Guilds</h2>
+        <div class="connections-list" id="connections-list">
+            <!-- Connections and Guilds will be dynamically populated here -->
+        </div>
     </div>
 
     <script>
@@ -164,30 +157,35 @@
             }
 
             // Populate profile header
-            const profilePicture = document.querySelector('.profile-picture img');
-            profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
+            const profileAvatar = document.querySelector('.profile-avatar');
+            profileAvatar.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username;
+            document.getElementById('details').textContent = `Discord ID: ${userId}`;
 
-            // Event listener for the 'Overview' tab
-            const overviewTab = document.querySelector('#overview-tab');
-            overviewTab.addEventListener('click', async () => {
-                const content = document.getElementById('profile-content');
-                content.innerHTML = ''; // Clear previous content
+            // Fetch and display connections and guilds
+            const connectionsList = document.getElementById('connections-list');
+            const connectionsData = await fetchData('connections');
+            if (connectionsData) {
+                connectionsData.forEach((connection) => {
+                    const connectionItem = document.createElement('div');
+                    connectionItem.className = 'connection-item';
 
-                // Display user overview information here
-                const overviewElement = document.createElement('div');
-                overviewElement.innerHTML = `
-                    <h2>Overview</h2>
-                    <p>Full Name: ${userData.full_name}</p>
-                    <p>Email: ${userData.email}</p>
-                    <p>Location: ${userData.location}</p>
-                    <p>Bio: ${userData.bio}</p>
-                `;
-                content.appendChild(overviewElement);
-            });
+                    const connectionLogo = document.createElement('div');
+                    connectionLogo.className = 'connection-logo';
+                    const logoImage = document.createElement('img');
+                    const logoURL = getLogoURL(connection.type); // Get logo URL based on type
+                    logoImage.src = logoURL;
+                    connectionLogo.appendChild(logoImage);
 
-            // Trigger the 'Overview' tab by default
-            overviewTab.click();
+                    const connectionName = document.createElement('div');
+                    connectionName.className = 'connection-name';
+                    connectionName.textContent = connection.name;
+
+                    connectionItem.appendChild(connectionLogo);
+                    connectionItem.appendChild(connectionName);
+                    connectionsList.appendChild(connectionItem);
+                });
+            }
         }
 
         populateProfile();

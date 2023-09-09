@@ -52,7 +52,39 @@
             margin: 0 auto;
         }
 
-        /* Remove the CSS styles related to posts if not needed */
+        .profile-connections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .profile-connection {
+            flex-basis: calc(33.333% - 20px);
+            margin-bottom: 20px;
+        }
+
+        .profile-connection img {
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .profile-guilds {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .profile-guild {
+            flex-basis: calc(33.333% - 20px);
+            margin-bottom: 20px;
+        }
+
+        .profile-guild img {
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -62,9 +94,8 @@
         </div>
         <div class="profile-username" id="username"></div>
         <div class="profile-tabs">
-            <!-- Remove the "Posts" tab -->
-            <div class="profile-tab" id="guilds-tab">Guilds</div>
             <div class="profile-tab" id="connections-tab">Connections</div>
+            <div class="profile-tab" id="guilds-tab">Guilds</div>
         </div>
     </header>
     <div class="profile-content" id="profile-content">
@@ -76,12 +107,6 @@
         const url = window.location.href;
         const parts = url.split('/');
         const userId = parts[parts.length - 1];
-
-        // Function to set the background color
-        function setProfileHeaderBackgroundColor(color) {
-            const profileHeader = document.querySelector('.profile-header');
-            profileHeader.style.backgroundColor = color;
-        }
 
         async function fetchData(type) {
             try {
@@ -98,11 +123,6 @@
         async function populateProfile() {
             const userData = await fetchData('user');
 
-            // Check if banner_color exists in the user data and set it as background color
-            if (userData.banner_color) {
-                setProfileHeaderBackgroundColor(userData.banner_color);
-            }
-
             // Populate profile header
             const profilePicture = document.querySelector('.profile-picture img');
             profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
@@ -118,31 +138,63 @@
                     content.innerHTML = ''; // Clear previous content
 
                     switch (tabId) {
-                        case 'guilds':
-                            // Fetch and display guilds here
-                            const guildsData = await fetchData('guilds');
-                            const guildsElement = document.createElement('div');
-                            if (guildsData) {
-                                guildsData.forEach((guild) => {
-                                    const guildItem = document.createElement('div');
-                                    guildItem.textContent = guild.name;
-                                    guildsElement.appendChild(guildItem);
-                                });
-                            }
-                            content.appendChild(guildsElement);
-                            break;
                         case 'connections':
                             // Fetch and display connections here
                             const connectionsData = await fetchData('connections');
                             const connectionsElement = document.createElement('div');
+                            connectionsElement.className = 'profile-connections';
                             if (connectionsData) {
                                 connectionsData.forEach((connection) => {
                                     const connectionItem = document.createElement('div');
-                                    connectionItem.textContent = connection.name;
+                                    connectionItem.className = 'profile-connection';
+
+                                    // Create and add the logo image
+                                    const logoImage = document.createElement('img');
+                                    logoImage.src = connection.logo_url;
+                                    logoImage.alt = connection.name;
+                                    connectionItem.appendChild(logoImage);
+
+                                    // Create and add the user ID
+                                    const userIdElement = document.createElement('div');
+                                    userIdElement.textContent = `User ID: ${connection.user_id}`;
+                                    connectionItem.appendChild(userIdElement);
+
+                                    // Create and add the profile link
+                                    const profileLinkElement = document.createElement('a');
+                                    profileLinkElement.href = connection.profile_link;
+                                    profileLinkElement.textContent = 'Profile Link';
+                                    connectionItem.appendChild(profileLinkElement);
+
                                     connectionsElement.appendChild(connectionItem);
                                 });
                             }
                             content.appendChild(connectionsElement);
+                            break;
+                        case 'guilds':
+                            // Fetch and display guilds here
+                            const guildsData = await fetchData('guilds');
+                            const guildsElement = document.createElement('div');
+                            guildsElement.className = 'profile-guilds';
+                            if (guildsData) {
+                                guildsData.forEach((guild) => {
+                                    const guildItem = document.createElement('div');
+                                    guildItem.className = 'profile-guild';
+
+                                    // Create and add the guild icon image
+                                    const guildIcon = document.createElement('img');
+                                    guildIcon.src = guild.icon_url;
+                                    guildIcon.alt = guild.name;
+                                    guildItem.appendChild(guildIcon);
+
+                                    // Add the guild name
+                                    const guildName = document.createElement('div');
+                                    guildName.textContent = guild.name;
+                                    guildItem.appendChild(guildName);
+
+                                    guildsElement.appendChild(guildItem);
+                                });
+                            }
+                            content.appendChild(guildsElement);
                             break;
                         default:
                             break;
@@ -150,10 +202,11 @@
                 });
             });
 
-            // Trigger the 'Posts' tab by default
+            // Trigger the 'Connections' tab by default
             tabs[0].click();
         }
-            populateProfile();
-        </script>
-    </body>
+
+        populateProfile();
+    </script>
+</body>
 </html>

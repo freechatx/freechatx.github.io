@@ -117,6 +117,9 @@
             const connectionsData = await fetchData('connections');
 
             // Populate profile header
+            const header = document.querySelector('.profile-header');
+            header.style.backgroundColor = userData.banner_color;
+            document.getElementsByClassName('profile-header')
             document.querySelector('.profile-picture img').src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username; 
             document.getElementById('bio').textContent = "hello there!"//userData.bio;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,23 +11,28 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Hide overflow to prevent scrollbars */
+            overflow: hidden;
+            /* Hide overflow to prevent scrollbars */
         }
 
         #particles-js {
             position: absolute;
             width: 100%;
             height: 100%;
-            background-color: #333; /* Dark gray background */
+            background-color: #333;
+            /* Dark gray background */
         }
 
         .profile-header {
-            background-color: #0095f6; /* Default background color */
+            background-color: #0095f6;
+            /* Default background color */
             color: #fff;
             text-align: center;
             padding: 20px;
-            border: 3px solid #fff; /* White border */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow effect */
+            border: 3px solid #fff;
+            /* White border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            /* Box shadow effect */
         }
 
         .profile-picture img {
@@ -35,7 +41,8 @@
             border-radius: 50%;
             margin: 10px auto;
             display: block;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Box shadow for profile picture */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            /* Box shadow for profile picture */
         }
 
         .profile-username {
@@ -59,10 +66,12 @@
         .profile-content {
             max-width: 600px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Semi-transparent white background */
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for content */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            /* Box shadow for content */
         }
 
         .connection-list {
@@ -84,6 +93,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Particle background -->
     <div id="particles-js"></div>
@@ -156,85 +166,85 @@
         }
 
         async function populateProfile() {
-    const userData = await fetchData('user');
+            const userData = await fetchData('user');
 
-    // Check if banner_color exists in the user data and set it as background color
-    if (userData.banner_color) {
-        setProfileHeaderBackgroundColor(userData.banner_color);
-    }
-
-    // Populate profile header
-    const profilePicture = document.querySelector('.profile-picture img');
-    profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
-    document.getElementById('username').textContent = userData.username;
-
-    // Event listeners for tabs
-    const tabs = document.querySelectorAll('.profile-tab');
-    tabs.forEach((tab) => {
-        tab.addEventListener('click', async () => {
-            const tabId = tab.id.replace('-tab', '');
-            const content = document.getElementById('profile-content');
-
-            content.innerHTML = ''; // Clear previous content
-
-            switch (tabId) {
-                case 'guilds':
-                    // Fetch and display guilds here
-                    const guildsData = await fetchData('guilds');
-                    console.log('Guilds Data:', guildsData); // Debugging
-                    const guildsElement = document.createElement('div');
-                    if (guildsData) {
-                        guildsData.forEach((guild) => {
-                            const guildItem = document.createElement('div');
-                            guildItem.className = 'connection-item';
-                            const guildLogo = document.createElement('div');
-                            guildLogo.className = 'connection-logo';
-                            const logoImage = document.createElement('img');
-                            logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
-                            guildLogo.appendChild(logoImage);
-                            const guildName = document.createElement('div');
-                            guildName.textContent = guild.name;
-                            guildItem.appendChild(guildLogo);
-                            guildItem.appendChild(guildName);
-                            guildsElement.appendChild(guildItem);
-                        });
-                    }
-                    content.appendChild(guildsElement);
-                    break;
-                case 'connections':
-                    // Fetch and display connections here
-                    const connectionsData = await fetchData('connections');
-                    console.log('Connections Data:', connectionsData); // Debugging
-                    const connectionsElement = document.createElement('div');
-                    connectionsElement.className = 'connection-list';
-                    if (connectionsData) {
-                        connectionsData.forEach((connection) => {
-                            const connectionItem = document.createElement('div');
-                            connectionItem.className = 'connection-item';
-                            const connectionLogo = document.createElement('div');
-                            connectionLogo.className = 'connection-logo';
-                            const logoImage = document.createElement('img');
-                            const logoURL = getLogoURL(connection.type);
-                            logoImage.src = logoURL;
-                            connectionLogo.appendChild(logoImage);
-                            const connectionName = document.createElement('div');
-                            connectionName.textContent = connection.name;
-                            connectionItem.appendChild(connectionLogo);
-                            connectionItem.appendChild(connectionName);
-                            connectionsElement.appendChild(connectionItem);
-                        });
-                    }
-                    content.appendChild(connectionsElement);
-                    break;
-                default:
-                    break;
+            // Check if banner_color exists in the user data and set it as background color
+            if (userData.banner_color) {
+                setProfileHeaderBackgroundColor(userData.banner_color);
             }
-        });
-    });
 
-    // Trigger the 'Guilds' tab by default
-    tabs[0].click();
-}
+            // Populate profile header
+            const profilePicture = document.querySelector('.profile-picture img');
+            profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
+            document.getElementById('username').textContent = userData.username;
+
+            // Event listeners for tabs
+            const tabs = document.querySelectorAll('.profile-tab');
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', async () => {
+                    const tabId = tab.id.replace('-tab', '');
+                    const content = document.getElementById('profile-content');
+
+                    content.innerHTML = ''; // Clear previous content
+
+                    switch (tabId) {
+                        case 'guilds':
+                            // Fetch and display guilds here
+                            const guildsData = await fetchData('guilds');
+                            console.log('Guilds Data:', guildsData); // Debugging
+                            const guildsElement = document.createElement('div');
+                            if (guildsData) {
+                                guildsData.forEach((guild) => {
+                                    const guildItem = document.createElement('div');
+                                    guildItem.className = 'connection-item';
+                                    const guildLogo = document.createElement('div');
+                                    guildLogo.className = 'connection-logo';
+                                    const logoImage = document.createElement('img');
+                                    logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
+                                    guildLogo.appendChild(logoImage);
+                                    const guildName = document.createElement('div');
+                                    guildName.textContent = guild.name;
+                                    guildItem.appendChild(guildLogo);
+                                    guildItem.appendChild(guildName);
+                                    guildsElement.appendChild(guildItem);
+                                });
+                            }
+                            content.appendChild(guildsElement);
+                            break;
+                        case 'connections':
+                            // Fetch and display connections here
+                            const connectionsData = await fetchData('connections');
+                            console.log('Connections Data:', connectionsData); // Debugging
+                            const connectionsElement = document.createElement('div');
+                            connectionsElement.className = 'connection-list';
+                            if (connectionsData) {
+                                connectionsData.forEach((connection) => {
+                                    const connectionItem = document.createElement('div');
+                                    connectionItem.className = 'connection-item';
+                                    const connectionLogo = document.createElement('div');
+                                    connectionLogo.className = 'connection-logo';
+                                    const logoImage = document.createElement('img');
+                                    const logoURL = getLogoURL(connection.type);
+                                    logoImage.src = logoURL;
+                                    connectionLogo.appendChild(logoImage);
+                                    const connectionName = document.createElement('div');
+                                    connectionName.textContent = connection.name;
+                                    connectionItem.appendChild(connectionLogo);
+                                    connectionItem.appendChild(connectionName);
+                                    connectionsElement.appendChild(connectionItem);
+                                });
+                            }
+                            content.appendChild(connectionsElement);
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            });
+
+            // Trigger the 'Guilds' tab by default
+            tabs[0].click();
+        }
 
 
 
@@ -249,7 +259,8 @@
                 line_linked: { enable: false, distance: 150, color: '#ffffff', opacity: 0.4, width: 1 },
                 move: { enable: true, speed: 1, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false, attract: { enable: false, rotateX: 600, rotateY: 600 } }
             },
-            interactivity: { detect_on: 'canvas', events: { onhover: { enable: true, mode: 'bubble' }, onclick: { enable: true, mode: 'repulse' }, resize: true },
+            interactivity: {
+                detect_on: 'canvas', events: { onhover: { enable: true, mode: 'bubble' }, onclick: { enable: true, mode: 'repulse' }, resize: true },
                 modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 250, size: 0, duration: 2, opacity: 0, speed: 3 }, repulse: { distance: 400, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
             },
             retina_detect: true
@@ -258,4 +269,5 @@
         populateProfile();
     </script>
 </body>
+
 </html>

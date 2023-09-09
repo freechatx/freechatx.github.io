@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Profile</title>
+    <title>Instagram-like Profile</title>
     <style>
         /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #fafafa;
             margin: 0;
             padding: 0;
         }
 
         .profile-header {
-            background-color: #7289da; /* Default background color */
+            background-color: #0095f6; /* Default background color */
             color: #fff;
             text-align: center;
             padding: 20px;
@@ -37,38 +37,25 @@
         .profile-tabs {
             display: flex;
             justify-content: space-around;
-            background-color: #ffffff;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ccc;
             padding: 10px;
         }
 
         .profile-tab {
             cursor: pointer;
             font-size: 16px;
-            padding: 10px 20px;
-            color: #555;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .profile-tab:hover {
-            background-color: #f0f0f0;
+            padding: 10px 0;
         }
 
         .profile-content {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .connection-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            justify-content: space-between;
         }
 
         .connection-item {
@@ -76,24 +63,36 @@
             margin-bottom: 20px;
             text-align: center;
             padding: 10px;
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
+            background-color: #fff;
             border-radius: 5px;
-            transition: transform 0.3s ease;
-        }
-
-        .connection-item:hover {
-            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .connection-logo img {
-            max-width: 60px;
-            max-height: 60px;
+            max-width: 80px;
+            max-height: 80px;
             border-radius: 50%;
-            margin-bottom: 10px;
         }
+    </style>
+</head>
+<body>
+    <header class="profile-header">
+        <div class="profile-picture">
+            <img src="" alt="Profile Picture">
+        </div>
+        <div class="profile-username" id="username"></div>
+        <div class="profile-tabs">
+            <!-- Remove the "Posts" tab -->
+            <div class="profile-tab" id="guilds-tab">Guilds</div>
+            <div class="profile-tab" id="connections-tab">Connections</div>
+        </div>
+    </header>
+    <div class="profile-content" id="profile-content">
+        <!-- Content will be dynamically populated here -->
+    </div>
 
-        /* Define logo URLs for each connection type */
+    <script>
+        // Function to map connection type to logo URL
         function getLogoURL(connectionType) {
             switch (connectionType) {
                 case 'battlenet':
@@ -133,25 +132,7 @@
                     return 'URL_TO_DEFAULT_LOGO';
             }
         }
-    </style>
-</head>
-<body>
-    <header class="profile-header">
-        <div class="profile-picture">
-            <img src="" alt="Profile Picture">
-        </div>
-        <div class="profile-username" id="username"></div>
-        <div class="profile-tabs">
-            <!-- Remove the "Posts" tab -->
-            <div class="profile-tab" id="guilds-tab">Guilds</div>
-            <div class="profile-tab" id="connections-tab">Connections</div>
-        </div>
-    </header>
-    <div class="profile-content" id="profile-content">
-        <!-- Content will be dynamically populated here -->
-    </div>
 
-    <script>
         // JavaScript to extract the userId from the URL
         const url = window.location.href;
         const parts = url.split('/');
@@ -232,7 +213,7 @@
                                     const connectionLogo = document.createElement('div');
                                     connectionLogo.className = 'connection-logo';
                                     const logoImage = document.createElement('img');
-                                    const logoURL = getLogoURL(connection.type); // Get logo URL based on type
+                                    const logoURL = getLogoURL(connection.type);
                                     logoImage.src = logoURL;
                                     connectionLogo.appendChild(logoImage);
                                     const connectionName = document.createElement('div');

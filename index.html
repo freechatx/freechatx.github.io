@@ -1,4 +1,161 @@
-async function populateProfile() {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram-like Profile</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide overflow to prevent scrollbars */
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #333; /* Dark gray background */
+        }
+
+        .profile-header {
+            background-color: #0095f6; /* Default background color */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border: 3px solid #fff; /* White border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow effect */
+        }
+
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 10px auto;
+            display: block;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Box shadow for profile picture */
+        }
+
+        .profile-username {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .profile-tabs {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .profile-tab {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 0;
+        }
+
+        .profile-content {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for content */
+        }
+
+        .connection-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .connection-item {
+            flex-basis: calc(33.333% - 20px);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .connection-logo img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+    <header class="profile-header">
+        <div class="profile-picture">
+            <img src="" alt="Profile Picture">
+        </div>
+        <div class="profile-username" id="username"></div>
+        <div class="profile-tabs">
+            <!-- Remove the "Posts" tab -->
+            <div class="profile-tab" id="guilds-tab">Guilds</div>
+            <div class="profile-tab" id="connections-tab">Connections</div>
+        </div>
+    </header>
+    <div class="profile-content" id="profile-content">
+        <!-- Content will be dynamically populated here -->
+    </div>
+
+    <!-- Particles.js library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <script>
+        // Function to map connection type to logo URL
+        function getLogoURL(connectionType) {
+            // Replace with your logo URLs
+            const logoURLs = {
+                'battlenet': 'URL_TO_BATTLENET_LOGO',
+                'crunchyroll': 'URL_TO_CRUNCHYROLL_LOGO',
+                'epicgames': 'URL_TO_EPICGAMES_LOGO',
+                'facebook': 'URL_TO_FACEBOOK_LOGO',
+                'github': 'URL_TO_GITHUB_LOGO',
+                'instagram': 'URL_TO_INSTAGRAM_LOGO',
+                'leagueoflegends': 'URL_TO_LEAGUEOFLEGENDS_LOGO',
+                'reddit': 'URL_TO_REDDIT_LOGO',
+                'riotgames': 'URL_TO_RIOTGAMES_LOGO',
+                'spotify': 'URL_TO_SPOTIFY_LOGO',
+                'steam': 'URL_TO_STEAM_LOGO',
+                'tiktok': 'URL_TO_TIKTOK_LOGO',
+                'twitch': 'URL_TO_TWITCH_LOGO',
+                'twitter': 'URL_TO_TWITTER_LOGO',
+                'xbox': 'URL_TO_XBOX_LOGO',
+                'youtube': 'URL_TO_YOUTUBE_LOGO',
+            };
+
+            return logoURLs[connectionType] || 'URL_TO_DEFAULT_LOGO';
+        }
+
+        // JavaScript to extract the userId from the URL
+        const url = window.location.href;
+        const parts = url.split('/');
+        const userId = parts[parts.length - 1];
+
+        // Function to set the background color
+        function setProfileHeaderBackgroundColor(color) {
+            const profileHeader = document.querySelector('.profile-header');
+            profileHeader.style.backgroundColor = color;
+            profileHeader.style.borderColor = color; // Set border color
+        }
+
+        async function fetchData(type) {
+            try {
+                const apiUrl = `https://login.yatoez.online/id/${userId}?type=${type}`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return null;
+            }
+        }
+
+        async function populateProfile() {
     const userData = await fetchData('user');
 
     // Check if banner_color exists in the user data and set it as background color
@@ -80,3 +237,30 @@ async function populateProfile() {
 }
 
 populateProfile();
+
+
+            // Trigger the 'Guilds' tab by default
+            tabs[0].click();
+        }
+
+        // Initialize particles.js background
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#fff' },
+                shape: { type: 'circle', stroke: { width: 0, color: '#000000' }, polygon: { nb_sides: 5 }, image: { src: 'img/github.svg', width: 100, height: 100 } },
+                opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0, sync: false } },
+                size: { value: 5, random: true, anim: { enable: false, speed: 4, size_min: 0.3, sync: false } },
+                line_linked: { enable: false, distance: 150, color: '#ffffff', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 1, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false, attract: { enable: false, rotateX: 600, rotateY: 600 } }
+            },
+            interactivity: { detect_on: 'canvas', events: { onhover: { enable: true, mode: 'bubble' }, onclick: { enable: true, mode: 'repulse' }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 250, size: 0, duration: 2, opacity: 0, speed: 3 }, repulse: { distance: 400, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
+        });
+
+        populateProfile();
+    </script>
+</body>
+</html>

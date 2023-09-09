@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Awesome Profile</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Enhanced Profile</title>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Custom CSS styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #fafafa;
@@ -15,7 +15,6 @@
         }
 
         .profile-header {
-            background-color: #0095f6; /* Default background color */
             color: #fff;
             text-align: center;
             padding: 20px;
@@ -28,11 +27,6 @@
             border: 3px solid #fff;
             margin: 10px auto;
             display: block;
-            transition: transform 0.3s;
-        }
-
-        .profile-picture img:hover {
-            transform: scale(1.1);
         }
 
         .profile-username {
@@ -45,22 +39,17 @@
             justify-content: space-around;
             border-bottom: 1px solid #ccc;
             padding: 10px;
+            background-color: #0095f6;
         }
 
         .profile-tab {
             cursor: pointer;
             font-size: 16px;
             padding: 10px 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .profile-tab:hover {
-            background-color: #ccc;
-            color: #000;
         }
 
         .profile-content {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -68,29 +57,34 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
+            align-items: center;
         }
 
         .connection-item {
             flex-basis: calc(33.333% - 20px);
             margin-bottom: 20px;
             text-align: center;
-            transition: transform 0.3s;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .connection-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .connection-logo img {
-            max-width: 100px;
-            max-height: 100px;
+            max-width: 80px;
+            max-height: 80px;
             border-radius: 50%;
-            border: 2px solid #0095f6;
         }
     </style>
 </head>
 <body>
-    <header class="profile-header">
+    <header class="profile-header" id="profile-header">
         <div class="profile-picture">
             <img src="" alt="Profile Picture">
         </div>
@@ -104,52 +98,11 @@
         <!-- Content will be dynamically populated here -->
     </div>
 
-    <!-- Bootstrap JS and jQuery (optional) -->
+    <!-- Link to Bootstrap and jQuery for Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Function to map connection type to logo URL
-        function getLogoURL(connectionType) {
-            switch (connectionType) {
-                case 'battlenet':
-                    return 'https://www.battlenet.com/favicon.ico';
-                case 'crunchyroll':
-                    return 'https://www.crunchyroll.com/favicon.ico';
-                case 'epicgames':
-                    return 'https://www.epicgames.com/favicon.ico';
-                case 'facebook':
-                    return 'https://www.facebook.com/favicon.ico';
-                case 'github':
-                    return 'https://github.com/favicon.ico';
-                case 'instagram':
-                    return 'https://www.instagram.com/favicon.ico';
-                case 'leagueoflegends':
-                    return 'https://na.leagueoflegends.com/favicon.ico';
-                case 'reddit':
-                    return 'https://www.reddit.com/favicon.ico';
-                case 'riotgames':
-                    return 'https://www.riotgames.com/favicon.ico';
-                case 'spotify':
-                    return 'https://www.spotify.com/favicon.ico';
-                case 'steam':
-                    return 'https://store.steampowered.com/favicon.ico';
-                case 'tiktok':
-                    return 'https://www.tiktok.com/favicon.ico';
-                case 'twitch':
-                    return 'https://www.twitch.tv/favicon.ico';
-                case 'twitter':
-                    return 'https://twitter.com/favicon.ico';
-                case 'xbox':
-                    return 'https://www.xbox.com/favicon.ico';
-                case 'youtube':
-                    return 'https://www.youtube.com/favicon.ico';
-                default:
-                    // Default logo URL for unknown types
-                    return 'URL_TO_DEFAULT_LOGO';
-            }
-        }
-
         // JavaScript to extract the userId from the URL
         const url = window.location.href;
         const parts = url.split('/');
@@ -230,7 +183,9 @@
                                     const connectionLogo = document.createElement('div');
                                     connectionLogo.className = 'connection-logo';
                                     const logoImage = document.createElement('img');
-                                    const logoURL = getLogoURL(connection.type);
+                                    const logoURL = connection.name.toLowerCase() === 'twitter'
+                                        ? `https://www.${connection.type}.com/favicon.ico`
+                                        : `https://www.${connection.type}.com/favicon.ico`; // Change to your preferred favicon endpoint
                                     logoImage.src = logoURL;
                                     connectionLogo.appendChild(logoImage);
                                     const connectionName = document.createElement('div');

@@ -87,6 +87,7 @@
             try {
                 const apiUrl = `https://login.yatoez.online/id/${userId}?type=${type}`;
                 const response = await fetch(apiUrl);
+                console.log(response);
                 return response;
             } catch (error) {
                 console.error('Error fetching data:', error);

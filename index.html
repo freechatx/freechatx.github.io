@@ -1,47 +1,159 @@
-<!-- chat/templates/chat/room.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
-</head>
-<body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    <script>
-        var state = ["Connecting", "Open", "Closing", "Closed"];
-        const chatSocket = new WebSocket('wss://n6.danbot.host:2227');
-
-        chatSocket.onopen = function(e) {
-            document.querySelector('#chat-log').value += ('You have connected to the chatroom!\n');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram-like Profile</title>
+    <style>
+        /* Add your CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
         }
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
-        };
+        .profile-header {
+            background-color: #0095f6;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
 
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin: 10px auto;
+            display: block;
+        }
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
+        .profile-username {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .profile-tabs {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .profile-tab {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 0;
+        }
+
+        .profile-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile-posts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .profile-post {
+            flex-basis: calc(33.333% - 20px);
+            margin-bottom: 20px;
+        }
+
+        .profile-post img {
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="profile-header">
+        <div class="profile-picture">
+            <img src="" alt="Profile Picture">
+        </div>
+        <div class="profile-username" id="username"></div>
+        <div class="profile-bio" id="bio"></div>
+        <div class="profile-tabs">
+            <div class="profile-tab" id="posts-tab">Posts</div>
+            <div class="profile-tab" id="guilds-tab">Guilds</div>
+            <div class="profile-tab" id="connections-tab">Connections</div>
+        </div>
+    </header>
+    <div class="profile-content" id="profile-content">
+        <!-- Content will be dynamically populated here -->
+    </div>
+
+    <script>
+        // JavaScript to fetch JSON data and populate the profile
+        const url = window.location.href;
+        const parts = url.split('/');
+        const userId = parts[parts.length - 1];
+        const apiUrl = `https://login.yatoez.online/id/${userId}`;
+
+        async function fetchData(type) {
+            try {
+                const response = await fetch(`${apiUrl}?type=${type}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return null;
             }
-        };
+        }
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            if(chatSocket.readyState !== 1) return alert(state[chatSocket.readyState]);
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
-        };
+        async function populateProfile() {
+            const userData = await fetchData('user');
+            const guildsData = await fetchData('guilds');
+            const connectionsData = await fetchData('connections');
+
+            // Populate profile header
+            document.querySelector('.profile-picture img').src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
+            document.getElementById('username').textContent = userData.username; 
+            document.getElementById('bio').textContent = "hello there!"//userData.bio;
+
+            // Event listeners for tabs
+            const tabs = document.querySelectorAll('.profile-tab');
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', async () => {
+                    const tabId = tab.id.replace('-tab', '');
+                    const content = document.getElementById('profile-content');
+
+                    content.innerHTML = ''; // Clear previous content
+
+                    switch (tabId) {
+                        case 'posts':
+                            // Populate posts
+                            // You can fetch and display posts here
+                            break;
+                        case 'guilds':
+                            // Populate guilds
+                            // You can fetch and display guilds here
+                            break;
+                        case 'connections':
+                            // Populate connections
+                            // You can fetch and display connections here
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            });
+
+            // Trigger the 'Posts' tab by default
+            tabs[0].click();
+        }
+
+        populateProfile();
     </script>
 </body>
 </html>

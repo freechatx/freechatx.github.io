@@ -120,7 +120,7 @@
             }
 
             // Populate profile header
-            document.querySelector('.profile-picture img').src = userData.avatar;
+            document.querySelector('.profile-picture img').src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username;
 
             // Event listeners for tabs

@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram-like Profile</title>
+    <title>Facebook-like Profile</title>
     <style>
         /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
-            background-color: #fafafa;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
         }
 
         .profile-header {
-            background-color: #0095f6; /* Default background color */
+            background-color: #1877f2; /* Facebook blue */
             color: #fff;
             text-align: center;
             padding: 20px;
@@ -37,8 +37,9 @@
         .profile-tabs {
             display: flex;
             justify-content: space-around;
-            border-bottom: 1px solid #ccc;
+            background-color: #fff;
             padding: 10px;
+            border-bottom: 1px solid #ccc;
         }
 
         .profile-tab {
@@ -50,6 +51,9 @@
         .profile-content {
             max-width: 600px;
             margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
         }
 
         .connection-list {
@@ -63,15 +67,112 @@
             margin-bottom: 20px;
             text-align: center;
             padding: 10px;
-            background-color: #fff;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f0f2f5;
         }
 
         .connection-logo img {
-            max-width: 80px;
-            max-height: 80px;
+            max-width: 60px;
+            max-height: 60px;
             border-radius: 50%;
+        }
+
+        /* Icons for connection types */
+        .icon-battlenet::before {
+            content: '\f19a'; /* Battle.net icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-crunchyroll::before {
+            content: '\f135'; /* Crunchyroll icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-epicgames::before {
+            content: '\f084'; /* Epic Games icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-facebook::before {
+            content: '\f09a'; /* Facebook icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-github::before {
+            content: '\f09b'; /* GitHub icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-instagram::before {
+            content: '\f16d'; /* Instagram icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-leagueoflegends::before {
+            content: '\f1b6'; /* League of Legends icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-reddit::before {
+            content: '\f281'; /* Reddit icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-riotgames::before {
+            content: '\f24e'; /* Riot Games icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-spotify::before {
+            content: '\f1bc'; /* Spotify icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-steam::before {
+            content: '\f1b6'; /* Steam icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-tiktok::before {
+            content: '\f1a7'; /* TikTok icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-twitch::before {
+            content: '\f1e8'; /* Twitch icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-twitter::before {
+            content: '\f099'; /* Twitter icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-xbox::before {
+            content: '\f412'; /* Xbox icon */
+            font-family: FontAwesome;
+            font-size: 24px;
+        }
+
+        .icon-youtube::before {
+            content: '\f167'; /* YouTube icon */
+            font-family: FontAwesome;
+            font-size: 24px;
         }
     </style>
 </head>

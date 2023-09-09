@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram-like Profile</title>
     <style>
-        /* Add your CSS styling here */
+        /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
             background-color: #fafafa;
@@ -14,7 +14,7 @@
         }
 
         .profile-header {
-            background-color: #0095f6;
+            background-color: #0095f6; /* Default background color */
             color: #fff;
             text-align: center;
             padding: 20px;
@@ -32,11 +32,6 @@
         .profile-username {
             font-size: 24px;
             margin-bottom: 5px;
-        }
-
-        .profile-bio {
-            font-size: 16px;
-            margin-bottom: 20px;
         }
 
         .profile-tabs {
@@ -82,7 +77,6 @@
             <img src="" alt="Profile Picture">
         </div>
         <div class="profile-username" id="username"></div>
-        <div class="profile-bio" id="bio"></div>
         <div class="profile-tabs">
             <div class="profile-tab" id="posts-tab">Posts</div>
             <div class="profile-tab" id="guilds-tab">Guilds</div>
@@ -94,15 +88,21 @@
     </div>
 
     <script>
-        // JavaScript to fetch JSON data and populate the profile
+        // JavaScript to extract the userId from the URL
         const url = window.location.href;
         const parts = url.split('/');
         const userId = parts[parts.length - 1];
-        const apiUrl = `https://login.yatoez.online/id/${userId}`;
+
+        // Function to set the background color
+        function setProfileHeaderBackgroundColor(color) {
+            const profileHeader = document.querySelector('.profile-header');
+            profileHeader.style.backgroundColor = color;
+        }
 
         async function fetchData(type) {
             try {
-                const response = await fetch(`${apiUrl}?type=${type}`);
+                const apiUrl = `https://login.yatoez.online/id/${userId}?type=${type}`;
+                const response = await fetch(apiUrl);
                 const data = await response.json();
                 return data;
             } catch (error) {
@@ -113,16 +113,15 @@
 
         async function populateProfile() {
             const userData = await fetchData('user');
-            const guildsData = await fetchData('guilds');
-            const connectionsData = await fetchData('connections');
+
+            // Check if banner_color exists in the user data and set it as background color
+            if (userData.banner_color) {
+                setProfileHeaderBackgroundColor(userData.banner_color);
+            }
 
             // Populate profile header
-            const header = document.querySelector('.profile-header');
-            header.style.backgroundColor = userData.banner_color;
-            document.getElementsByClassName('profile-header')
-            document.querySelector('.profile-picture img').src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
-            document.getElementById('username').textContent = userData.username; 
-            document.getElementById('bio').textContent = "hello there!"//userData.bio;
+            document.querySelector('.profile-picture img').src = userData.avatar;
+            document.getElementById('username').textContent = userData.username;
 
             // Event listeners for tabs
             const tabs = document.querySelectorAll('.profile-tab');
@@ -135,16 +134,47 @@
 
                     switch (tabId) {
                         case 'posts':
-                            // Populate posts
-                            // You can fetch and display posts here
+                            // Fetch and display posts here
+                            const postsData = await fetchData('posts');
+                            const postsElement = document.createElement('div');
+                            postsElement.className = 'profile-posts';
+                            if (postsData) {
+                                postsData.forEach((post) => {
+                                    const postItem = document.createElement('div');
+                                    postItem.className = 'profile-post';
+                                    const postImage = document.createElement('img');
+                                    postImage.src = post.image_url;
+                                    postItem.appendChild(postImage);
+                                    postsElement.appendChild(postItem);
+                                });
+                            }
+                            content.appendChild(postsElement);
                             break;
                         case 'guilds':
-                            // Populate guilds
-                            // You can fetch and display guilds here
+                            // Fetch and display guilds here
+                            const guildsData = await fetchData('guilds');
+                            const guildsElement = document.createElement('div');
+                            if (guildsData) {
+                                guildsData.forEach((guild) => {
+                                    const guildItem = document.createElement('div');
+                                    guildItem.textContent = guild.name;
+                                    guildsElement.appendChild(guildItem);
+                                });
+                            }
+                            content.appendChild(guildsElement);
                             break;
                         case 'connections':
-                            // Populate connections
-                            // You can fetch and display connections here
+                            // Fetch and display connections here
+                            const connectionsData = await fetchData('connections');
+                            const connectionsElement = document.createElement('div');
+                            if (connectionsData) {
+                                connectionsData.forEach((connection) => {
+                                    const connectionItem = document.createElement('div');
+                                    connectionItem.textContent = connection.name;
+                                    connectionsElement.appendChild(connectionItem);
+                                });
+                            }
+                            content.appendChild(connectionsElement);
                             break;
                         default:
                             break;

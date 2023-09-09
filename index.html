@@ -52,23 +52,7 @@
             margin: 0 auto;
         }
 
-        .profile-posts {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .profile-post {
-            flex-basis: calc(33.333% - 20px);
-            margin-bottom: 20px;
-        }
-
-        .profile-post img {
-            max-width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+        /* Remove the CSS styles related to posts if not needed */
     </style>
 </head>
 <body>
@@ -78,7 +62,7 @@
         </div>
         <div class="profile-username" id="username"></div>
         <div class="profile-tabs">
-            <div class="profile-tab" id="posts-tab">Posts</div>
+            <!-- Remove the "Posts" tab -->
             <div class="profile-tab" id="guilds-tab">Guilds</div>
             <div class="profile-tab" id="connections-tab">Connections</div>
         </div>
@@ -120,7 +104,8 @@
             }
 
             // Populate profile header
-            document.querySelector('.profile-picture img').src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
+            const profilePicture = document.querySelector('.profile-picture img');
+            profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username;
 
             // Event listeners for tabs
@@ -133,23 +118,6 @@
                     content.innerHTML = ''; // Clear previous content
 
                     switch (tabId) {
-                        case 'posts':
-                            // Fetch and display posts here
-                            const postsData = await fetchData('posts');
-                            const postsElement = document.createElement('div');
-                            postsElement.className = 'profile-posts';
-                            if (postsData) {
-                                postsData.forEach((post) => {
-                                    const postItem = document.createElement('div');
-                                    postItem.className = 'profile-post';
-                                    const postImage = document.createElement('img');
-                                    postImage.src = post.image_url;
-                                    postItem.appendChild(postImage);
-                                    postsElement.appendChild(postItem);
-                                });
-                            }
-                            content.appendChild(postsElement);
-                            break;
                         case 'guilds':
                             // Fetch and display guilds here
                             const guildsData = await fetchData('guilds');
@@ -182,11 +150,4 @@
                 });
             });
 
-            // Trigger the 'Posts' tab by default
-            tabs[0].click();
-        }
-
-        populateProfile();
-    </script>
-</body>
-</html>
+            // Trigger the

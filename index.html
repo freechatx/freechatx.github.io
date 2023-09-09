@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord-like Profile</title>
+    <title>Modern Profile</title>
     <style>
         /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
-            background-color: #36393f;
+            background-color: #000;
             margin: 0;
             padding: 0;
-            color: #fff;
         }
 
         .profile-header {
-            background-color: #7289da;
-            padding: 20px;
+            background-color: #0095f6; /* Default background color */
+            color: #fff;
             text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #0cf;
         }
 
-        .profile-avatar {
+        .profile-picture img {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 4px solid #7289da;
-            margin: 0 auto 10px;
+            border: 3px solid #fff;
+            margin: 10px auto;
             display: block;
         }
 
@@ -34,53 +35,44 @@
             margin-bottom: 5px;
         }
 
-        .profile-details {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
         .profile-content {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #202225;
-            border-radius: 5px;
         }
 
-        .connections-list {
+        .connection-list {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            gap: 20px;
         }
 
         .connection-item {
-            text-align: center;
-            margin: 10px;
             flex-basis: calc(33.333% - 20px);
+            margin-bottom: 20px;
+            text-align: center;
+            background-color: #000;
+            padding: 10px;
+            border: 2px solid #0cf;
+            border-radius: 10px;
         }
 
         .connection-logo img {
-            width: 80px;
-            height: 80px;
+            max-width: 100px;
+            max-height: 100px;
             border-radius: 50%;
-        }
-
-        .connection-name {
-            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <header class="profile-header">
-        <img class="profile-avatar" src="" alt="Profile Picture">
+        <div class="profile-picture">
+            <img src="" alt="Profile Picture">
+        </div>
         <div class="profile-username" id="username"></div>
-        <div class="profile-details" id="details"></div>
     </header>
     <div class="profile-content" id="profile-content">
-        <h2>Connections & Guilds</h2>
-        <div class="connections-list" id="connections-list">
-            <!-- Connections and Guilds will be dynamically populated here -->
-        </div>
+        <!-- Content will be dynamically populated here -->
     </div>
 
     <script>
@@ -157,35 +149,56 @@
             }
 
             // Populate profile header
-            const profileAvatar = document.querySelector('.profile-avatar');
-            profileAvatar.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
+            const profilePicture = document.querySelector('.profile-picture img');
+            profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username;
-            document.getElementById('details').textContent = `Discord ID: ${userId}`;
 
             // Fetch and display connections and guilds
-            const connectionsList = document.getElementById('connections-list');
+            const content = document.getElementById('profile-content');
             const connectionsData = await fetchData('connections');
+            const guildsData = await fetchData('guilds');
+
+            const connectionsElement = document.createElement('div');
+            connectionsElement.className = 'connection-list';
+
+            // Display connections
             if (connectionsData) {
                 connectionsData.forEach((connection) => {
                     const connectionItem = document.createElement('div');
                     connectionItem.className = 'connection-item';
-
                     const connectionLogo = document.createElement('div');
                     connectionLogo.className = 'connection-logo';
                     const logoImage = document.createElement('img');
                     const logoURL = getLogoURL(connection.type); // Get logo URL based on type
                     logoImage.src = logoURL;
                     connectionLogo.appendChild(logoImage);
-
                     const connectionName = document.createElement('div');
-                    connectionName.className = 'connection-name';
                     connectionName.textContent = connection.name;
-
                     connectionItem.appendChild(connectionLogo);
                     connectionItem.appendChild(connectionName);
-                    connectionsList.appendChild(connectionItem);
+                    connectionsElement.appendChild(connectionItem);
                 });
             }
+
+            // Display guilds
+            if (guildsData) {
+                guildsData.forEach((guild) => {
+                    const guildItem = document.createElement('div');
+                    guildItem.className = 'connection-item';
+                    const guildLogo = document.createElement('div');
+                    guildLogo.className = 'connection-logo';
+                    const logoImage = document.createElement('img');
+                    logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
+                    guildLogo.appendChild(logoImage);
+                    const guildName = document.createElement('div');
+                    guildName.textContent = guild.name;
+                    guildItem.appendChild(guildLogo);
+                    guildItem.appendChild(guildName);
+                    connectionsElement.appendChild(guildItem);
+                });
+            }
+
+            content.appendChild(connectionsElement);
         }
 
         populateProfile();

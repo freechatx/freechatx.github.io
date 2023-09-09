@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Profile</title>
+    <title>Instagram-like Profile</title>
     <style>
         /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
-            background-color: #000;
+            background-color: #333; /* Dark gray background */
             margin: 0;
             padding: 0;
         }
 
         .profile-header {
-            background-color: #0095f6; /* Default background color */
+            background-color: transparent; /* Transparent header background */
             color: #fff;
             text-align: center;
             padding: 20px;
-            border-bottom: 2px solid #0cf;
+            border: 2px solid transparent; /* Transparent border */
+            border-image: linear-gradient(135deg, #00f5ff, #f06595); /* Neon border gradient */
+            border-image-slice: 1;
+        }
+
+        .profile-picture {
+            float: left;
         }
 
         .profile-picture img {
@@ -35,29 +41,57 @@
             margin-bottom: 5px;
         }
 
+        .profile-tabs {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .profile-tab {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 0;
+        }
+
         .profile-content {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         .connection-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: flex-end; /* Align connections to the right */
         }
 
         .connection-item {
             flex-basis: calc(33.333% - 20px);
             margin-bottom: 20px;
             text-align: center;
-            background-color: #000;
-            padding: 10px;
-            border: 2px solid #0cf;
-            border-radius: 10px;
         }
 
         .connection-logo img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+        }
+
+        .guilds-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Center guilds */
+        }
+
+        .guild-item {
+            flex-basis: calc(33.333% - 20px);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .guild-logo img {
             max-width: 100px;
             max-height: 100px;
             border-radius: 50%;
@@ -70,6 +104,11 @@
             <img src="" alt="Profile Picture">
         </div>
         <div class="profile-username" id="username"></div>
+        <div class="profile-tabs">
+            <!-- Remove the "Posts" tab -->
+            <div class="profile-tab" id="guilds-tab">Guilds</div>
+            <div class="profile-tab" id="connections-tab">Connections</div>
+        </div>
     </header>
     <div class="profile-content" id="profile-content">
         <!-- Content will be dynamically populated here -->
@@ -80,37 +119,37 @@
         function getLogoURL(connectionType) {
             switch (connectionType) {
                 case 'battlenet':
-                    return 'URL_TO_BATTLENET_LOGO';
+                    return 'https://www.battlenet.com/favicon.ico';
                 case 'crunchyroll':
-                    return 'URL_TO_CRUNCHYROLL_LOGO';
+                    return 'https://www.crunchyroll.com/favicon.ico';
                 case 'epicgames':
-                    return 'URL_TO_EPICGAMES_LOGO';
+                    return 'https://www.epicgames.com/favicon.ico';
                 case 'facebook':
-                    return 'URL_TO_FACEBOOK_LOGO';
+                    return 'https://www.facebook.com/favicon.ico';
                 case 'github':
-                    return 'URL_TO_GITHUB_LOGO';
+                    return 'https://github.com/favicon.ico';
                 case 'instagram':
-                    return 'URL_TO_INSTAGRAM_LOGO';
+                    return 'https://www.instagram.com/favicon.ico';
                 case 'leagueoflegends':
-                    return 'URL_TO_LEAGUEOFLEGENDS_LOGO';
+                    return 'https://na.leagueoflegends.com/favicon.ico';
                 case 'reddit':
-                    return 'URL_TO_REDDIT_LOGO';
+                    return 'https://www.reddit.com/favicon.ico';
                 case 'riotgames':
-                    return 'URL_TO_RIOTGAMES_LOGO';
+                    return 'https://www.riotgames.com/favicon.ico';
                 case 'spotify':
-                    return 'URL_TO_SPOTIFY_LOGO';
+                    return 'https://www.spotify.com/favicon.ico';
                 case 'steam':
-                    return 'URL_TO_STEAM_LOGO';
+                    return 'https://store.steampowered.com/favicon.ico';
                 case 'tiktok':
-                    return 'URL_TO_TIKTOK_LOGO';
+                    return 'https://www.tiktok.com/favicon.ico';
                 case 'twitch':
-                    return 'URL_TO_TWITCH_LOGO';
+                    return 'https://www.twitch.tv/favicon.ico';
                 case 'twitter':
-                    return 'URL_TO_TWITTER_LOGO';
+                    return 'https://twitter.com/favicon.ico';
                 case 'xbox':
-                    return 'URL_TO_XBOX_LOGO';
+                    return 'https://www.xbox.com/favicon.ico';
                 case 'youtube':
-                    return 'URL_TO_YOUTUBE_LOGO';
+                    return 'https://www.youtube.com/favicon.ico';
                 default:
                     // Default logo URL for unknown types
                     return 'URL_TO_DEFAULT_LOGO';
@@ -153,52 +192,71 @@
             profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username;
 
-            // Fetch and display connections and guilds
-            const content = document.getElementById('profile-content');
-            const connectionsData = await fetchData('connections');
-            const guildsData = await fetchData('guilds');
+            // Event listeners for tabs
+            const tabs = document.querySelectorAll('.profile-tab');
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', async () => {
+                    const tabId = tab.id.replace('-tab', '');
+                    const content = document.getElementById('profile-content');
 
-            const connectionsElement = document.createElement('div');
-            connectionsElement.className = 'connection-list';
+                    content.innerHTML = ''; // Clear previous content
 
-            // Display connections
-            if (connectionsData) {
-                connectionsData.forEach((connection) => {
-                    const connectionItem = document.createElement('div');
-                    connectionItem.className = 'connection-item';
-                    const connectionLogo = document.createElement('div');
-                    connectionLogo.className = 'connection-logo';
-                    const logoImage = document.createElement('img');
-                    const logoURL = getLogoURL(connection.type); // Get logo URL based on type
-                    logoImage.src = logoURL;
-                    connectionLogo.appendChild(logoImage);
-                    const connectionName = document.createElement('div');
-                    connectionName.textContent = connection.name;
-                    connectionItem.appendChild(connectionLogo);
-                    connectionItem.appendChild(connectionName);
-                    connectionsElement.appendChild(connectionItem);
+                    switch (tabId) {
+                        case 'guilds':
+                            // Fetch and display guilds here
+                            const guildsData = await fetchData('guilds');
+                            const guildsElement = document.createElement('div');
+                            guildsElement.className = 'guilds-list';
+                            if (guildsData) {
+                                guildsData.forEach((guild) => {
+                                    const guildItem = document.createElement('div');
+                                    guildItem.className = 'guild-item';
+                                    const guildLogo = document.createElement('div');
+                                    guildLogo.className = 'guild-logo';
+                                    const logoImage = document.createElement('img');
+                                    logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
+                                    guildLogo.appendChild(logoImage);
+                                    const guildName = document.createElement('div');
+                                    guildName.textContent = guild.name;
+                                    guildItem.appendChild(guildLogo);
+                                    guildItem.appendChild(guildName);
+                                    guildsElement.appendChild(guildItem);
+                                });
+                            }
+                            content.appendChild(guildsElement);
+                            break;
+                        case 'connections':
+                            // Fetch and display connections here
+                            const connectionsData = await fetchData('connections');
+                            const connectionsElement = document.createElement('div');
+                            connectionsElement.className = 'connection-list';
+                            if (connectionsData) {
+                                connectionsData.forEach((connection) => {
+                                    const connectionItem = document.createElement('div');
+                                    connectionItem.className = 'connection-item';
+                                    const connectionLogo = document.createElement('div');
+                                    connectionLogo.className = 'connection-logo';
+                                    const logoImage = document.createElement('img');
+                                    const logoURL = getLogoURL(connection.type); // Get logo URL based on type
+                                    logoImage.src = logoURL;
+                                    connectionLogo.appendChild(logoImage);
+                                    const connectionName = document.createElement('div');
+                                    connectionName.textContent = connection.name;
+                                    connectionItem.appendChild(connectionLogo);
+                                    connectionItem.appendChild(connectionName);
+                                    connectionsElement.appendChild(connectionItem);
+                                });
+                            }
+                            content.appendChild(connectionsElement);
+                            break;
+                        default:
+                            break;
+                    }
                 });
-            }
+            });
 
-            // Display guilds
-            if (guildsData) {
-                guildsData.forEach((guild) => {
-                    const guildItem = document.createElement('div');
-                    guildItem.className = 'connection-item';
-                    const guildLogo = document.createElement('div');
-                    guildLogo.className = 'connection-logo';
-                    const logoImage = document.createElement('img');
-                    logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
-                    guildLogo.appendChild(logoImage);
-                    const guildName = document.createElement('div');
-                    guildName.textContent = guild.name;
-                    guildItem.appendChild(guildLogo);
-                    guildItem.appendChild(guildName);
-                    connectionsElement.appendChild(guildItem);
-                });
-            }
-
-            content.appendChild(connectionsElement);
+            // Trigger the 'Guilds' tab by default
+            tabs[0].click();
         }
 
         populateProfile();

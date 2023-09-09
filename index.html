@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram-like Profile</title>
+    <title>Awesome Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Your CSS styles here */
+        /* Custom CSS styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #333; /* Dark gray background */
+            background-color: #fafafa;
             margin: 0;
             padding: 0;
         }
 
         .profile-header {
-            background-color: transparent; /* Transparent header background */
+            background-color: #0095f6; /* Default background color */
             color: #fff;
             text-align: center;
             padding: 20px;
-            border: 2px solid transparent; /* Transparent border */
-            border-image: linear-gradient(135deg, #00f5ff, #f06595); /* Neon border gradient */
-            border-image-slice: 1;
-        }
-
-        .profile-picture {
-            float: left;
         }
 
         .profile-picture img {
@@ -34,6 +28,11 @@
             border: 3px solid #fff;
             margin: 10px auto;
             display: block;
+            transition: transform 0.3s;
+        }
+
+        .profile-picture img:hover {
+            transform: scale(1.1);
         }
 
         .profile-username {
@@ -52,6 +51,12 @@
             cursor: pointer;
             font-size: 16px;
             padding: 10px 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .profile-tab:hover {
+            background-color: #ccc;
+            color: #000;
         }
 
         .profile-content {
@@ -63,38 +68,24 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            justify-content: flex-end; /* Align connections to the right */
         }
 
         .connection-item {
             flex-basis: calc(33.333% - 20px);
             margin-bottom: 20px;
             text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .connection-item:hover {
+            transform: scale(1.05);
         }
 
         .connection-logo img {
             max-width: 100px;
             max-height: 100px;
             border-radius: 50%;
-        }
-
-        .guilds-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center; /* Center guilds */
-        }
-
-        .guild-item {
-            flex-basis: calc(33.333% - 20px);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .guild-logo img {
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 50%;
+            border: 2px solid #0095f6;
         }
     </style>
 </head>
@@ -105,7 +96,6 @@
         </div>
         <div class="profile-username" id="username"></div>
         <div class="profile-tabs">
-            <!-- Remove the "Posts" tab -->
             <div class="profile-tab" id="guilds-tab">Guilds</div>
             <div class="profile-tab" id="connections-tab">Connections</div>
         </div>
@@ -114,6 +104,10 @@
         <!-- Content will be dynamically populated here -->
     </div>
 
+    <!-- Bootstrap JS and jQuery (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // Function to map connection type to logo URL
         function getLogoURL(connectionType) {
@@ -206,13 +200,12 @@
                             // Fetch and display guilds here
                             const guildsData = await fetchData('guilds');
                             const guildsElement = document.createElement('div');
-                            guildsElement.className = 'guilds-list';
                             if (guildsData) {
                                 guildsData.forEach((guild) => {
                                     const guildItem = document.createElement('div');
-                                    guildItem.className = 'guild-item';
+                                    guildItem.className = 'connection-item';
                                     const guildLogo = document.createElement('div');
-                                    guildLogo.className = 'guild-logo';
+                                    guildLogo.className = 'connection-logo';
                                     const logoImage = document.createElement('img');
                                     logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
                                     guildLogo.appendChild(logoImage);
@@ -237,7 +230,7 @@
                                     const connectionLogo = document.createElement('div');
                                     connectionLogo.className = 'connection-logo';
                                     const logoImage = document.createElement('img');
-                                    const logoURL = getLogoURL(connection.type); // Get logo URL based on type
+                                    const logoURL = getLogoURL(connection.type);
                                     logoImage.src = logoURL;
                                     connectionLogo.appendChild(logoImage);
                                     const connectionName = document.createElement('div');

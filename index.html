@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook-like Profile</title>
+    <title>Discord-like Profile</title>
     <style>
         /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #36393f;
             margin: 0;
             padding: 0;
         }
 
         .profile-header {
-            background-color: #1877f2; /* Facebook blue */
+            background-color: #7289da;
             color: #fff;
             text-align: center;
             padding: 20px;
@@ -37,9 +37,8 @@
         .profile-tabs {
             display: flex;
             justify-content: space-around;
-            background-color: #fff;
-            padding: 10px;
             border-bottom: 1px solid #ccc;
+            padding: 10px;
         }
 
         .profile-tab {
@@ -49,130 +48,31 @@
         }
 
         .profile-content {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
+            border-radius: 5px;
             padding: 20px;
-            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .connection-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
         }
 
         .connection-item {
-            flex-basis: calc(33.333% - 20px);
+            flex-basis: calc(25% - 20px);
             margin-bottom: 20px;
             text-align: center;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f0f2f5;
         }
 
         .connection-logo img {
-            max-width: 60px;
-            max-height: 60px;
+            max-width: 80px;
+            max-height: 80px;
             border-radius: 50%;
-        }
-
-        /* Icons for connection types */
-        .icon-battlenet::before {
-            content: '\f19a'; /* Battle.net icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-crunchyroll::before {
-            content: '\f135'; /* Crunchyroll icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-epicgames::before {
-            content: '\f084'; /* Epic Games icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-facebook::before {
-            content: '\f09a'; /* Facebook icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-github::before {
-            content: '\f09b'; /* GitHub icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-instagram::before {
-            content: '\f16d'; /* Instagram icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-leagueoflegends::before {
-            content: '\f1b6'; /* League of Legends icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-reddit::before {
-            content: '\f281'; /* Reddit icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-riotgames::before {
-            content: '\f24e'; /* Riot Games icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-spotify::before {
-            content: '\f1bc'; /* Spotify icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-steam::before {
-            content: '\f1b6'; /* Steam icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-tiktok::before {
-            content: '\f1a7'; /* TikTok icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-twitch::before {
-            content: '\f1e8'; /* Twitch icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-twitter::before {
-            content: '\f099'; /* Twitter icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-xbox::before {
-            content: '\f412'; /* Xbox icon */
-            font-family: FontAwesome;
-            font-size: 24px;
-        }
-
-        .icon-youtube::before {
-            content: '\f167'; /* YouTube icon */
-            font-family: FontAwesome;
-            font-size: 24px;
         }
     </style>
 </head>
@@ -183,9 +83,7 @@
         </div>
         <div class="profile-username" id="username"></div>
         <div class="profile-tabs">
-            <!-- Remove the "Posts" tab -->
-            <div class="profile-tab" id="guilds-tab">Guilds</div>
-            <div class="profile-tab" id="connections-tab">Connections</div>
+            <div class="profile-tab" id="overview-tab">Overview</div>
         </div>
     </header>
     <div class="profile-content" id="profile-content">
@@ -270,70 +168,26 @@
             profilePicture.src = `https://cdn.discordapp.com/avatars/${userId}/${userData.avatar}`;
             document.getElementById('username').textContent = userData.username;
 
-            // Event listeners for tabs
-            const tabs = document.querySelectorAll('.profile-tab');
-            tabs.forEach((tab) => {
-                tab.addEventListener('click', async () => {
-                    const tabId = tab.id.replace('-tab', '');
-                    const content = document.getElementById('profile-content');
+            // Event listener for the 'Overview' tab
+            const overviewTab = document.querySelector('#overview-tab');
+            overviewTab.addEventListener('click', async () => {
+                const content = document.getElementById('profile-content');
+                content.innerHTML = ''; // Clear previous content
 
-                    content.innerHTML = ''; // Clear previous content
-
-                    switch (tabId) {
-                        case 'guilds':
-                            // Fetch and display guilds here
-                            const guildsData = await fetchData('guilds');
-                            const guildsElement = document.createElement('div');
-                            if (guildsData) {
-                                guildsData.forEach((guild) => {
-                                    const guildItem = document.createElement('div');
-                                    guildItem.className = 'connection-item';
-                                    const guildLogo = document.createElement('div');
-                                    guildLogo.className = 'connection-logo';
-                                    const logoImage = document.createElement('img');
-                                    logoImage.src = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
-                                    guildLogo.appendChild(logoImage);
-                                    const guildName = document.createElement('div');
-                                    guildName.textContent = guild.name;
-                                    guildItem.appendChild(guildLogo);
-                                    guildItem.appendChild(guildName);
-                                    guildsElement.appendChild(guildItem);
-                                });
-                            }
-                            content.appendChild(guildsElement);
-                            break;
-                        case 'connections':
-                            // Fetch and display connections here
-                            const connectionsData = await fetchData('connections');
-                            const connectionsElement = document.createElement('div');
-                            connectionsElement.className = 'connection-list';
-                            if (connectionsData) {
-                                connectionsData.forEach((connection) => {
-                                    const connectionItem = document.createElement('div');
-                                    connectionItem.className = 'connection-item';
-                                    const connectionLogo = document.createElement('div');
-                                    connectionLogo.className = 'connection-logo';
-                                    const logoImage = document.createElement('img');
-                                    const logoURL = getLogoURL(connection.type);
-                                    logoImage.src = logoURL;
-                                    connectionLogo.appendChild(logoImage);
-                                    const connectionName = document.createElement('div');
-                                    connectionName.textContent = connection.name;
-                                    connectionItem.appendChild(connectionLogo);
-                                    connectionItem.appendChild(connectionName);
-                                    connectionsElement.appendChild(connectionItem);
-                                });
-                            }
-                            content.appendChild(connectionsElement);
-                            break;
-                        default:
-                            break;
-                    }
-                });
+                // Display user overview information here
+                const overviewElement = document.createElement('div');
+                overviewElement.innerHTML = `
+                    <h2>Overview</h2>
+                    <p>Full Name: ${userData.full_name}</p>
+                    <p>Email: ${userData.email}</p>
+                    <p>Location: ${userData.location}</p>
+                    <p>Bio: ${userData.bio}</p>
+                `;
+                content.appendChild(overviewElement);
             });
 
-            // Trigger the 'Guilds' tab by default
-            tabs[0].click();
+            // Trigger the 'Overview' tab by default
+            overviewTab.click();
         }
 
         populateProfile();
